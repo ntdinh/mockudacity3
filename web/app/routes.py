@@ -73,8 +73,10 @@ def notification():
             queue_client.send(msg)
 
             return redirect('/Notifications')
-        except :
+        except Exception as ex:
+            logging.error(str(ex))
             logging.error('log unable to save notification')
+            return redirect('/Notifications')
 
     else:
         return render_template('notification.html')
