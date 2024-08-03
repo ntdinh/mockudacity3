@@ -61,11 +61,14 @@ You will need to install the following locally:
 ## Monthly Cost Analysis
 Complete a month cost analysis of each Azure resource to give an estimate total cost using the table below:
 
-| Azure Resource | Service Tier | Monthly Cost |
-| ------------ | ------------ | ------------ |
-| *Azure Postgres Database* |     |              |
-| *Azure Service Bus*   |         |              |
-| ...                   |         |              |
+| Azure Resource                       | Service Tier                                                                         | Monthly Cost |
+| -------------------------------------| ------------------------------------------------------------------------------------ |  ----------- |
+| Azure Postgres Database              | Burstable, B1ms: 1 vCores, 2 GiB RAM, 128 GiB storage, P10 (500 IOPS);               | ~ 27$        |
+| Azure Service Bus                    | Basic: Max Message Size 256 KB - 1M OPS                                              | ~ 0.05$      |
+| Azure Storage Account                | StorageV2 (general purpose v2)                                                       | ~ 0.05$      |    
+| Azure Function App                   | Free F1: 1 GB memory                                                                 | 0$           |
+| Azure Web App                        | Free F1: 1 GB memory                                                                 | 0$           |
+| -------------------------------------| -------------------------------------------------------------------------------------|--------------|
 
 ## Architecture Explanation
 This is a placeholder section where you can provide an explanation and reasoning for your architecture selection for both the Azure Web App and Azure Function.
