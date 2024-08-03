@@ -1,4 +1,3 @@
-
 import logging
 import azure.functions as func
 import psycopg2
@@ -10,44 +9,41 @@ from email.mime.text import MIMEText
 def main(msg: func.ServiceBusMessage):
 
     notification_id = int(msg.get_body().decode('utf-8'))
-    logging.info('Python ServiceBus queue trigger processed message: %s', notification_id)
 
     # TODO: Get connection to database
-    conn_string = os.getenv('POSTGRES_CONN_STRING')
-    conn = psycopg2.connect(conn_string)
+    conn_string = os.getenv('DB_URL')
+    conection = psycopg2.connect(conn_string)
 
     try:
-        # TODO: Get notification message and subject from database using the notification_id
-        cur = conn.cursor()
-        cur.execute("SELECT message, subject FROM notification WHERE id = %s;", (notification_id,))
+        cur = conection.cursor()
+        cur.execute("select message, subject from notification where id = %s;", (notification_id,))
         msgContent, subject = cur.fetchone()
 
         # TODO: Get attendees email and name
-        cur.execute("SELECT email FROM attendee;")
+        cur.execute("select email from attendee")
         attendees = cur.fetchall()
         logging.info(f'----- {len(attendees)}')
 
-        # TODO: Loop through each attendee and send an email with a personalized subject
         emails = list(map(lambda x: x[0], attendees))
         count = send_email(emails, subject, msgContent)
 
-        # TODO: Update the notification table by setting the completed date and updating the status with the total number of attendees notified
-        total_attendees = f'Notified {count} attendees'
+        total_attendees = f'Notification {count}'
         completed_date = datetime.utcnow()
-        cur.execute("UPDATE notification SET status = %s, completed_date = %s WHERE id = %s;", (total_attendees, completed_date, notification_id))
-        conn.commit()
+        cur.execute("update notification set status = %s, completed_date = %s where id = %s;", (total_attendees, completed_date, notification_id))
+        conection.commit()
 
     except (Exception, psycopg2.DatabaseError) as error:
         logging.error(error)
     finally:
         # TODO: Close connection
-        conn.close()
+        conection.close()
 
 def send_email(to_emails, subject, body):
     if to_emails is None or len(to_emails) == 0:
         return
 
-    # [cuongnh] I use Gmail to send emails instead of SendGrid. Currently, it is not possible to register a SendGrid account, some other students also encountered this issue.
+
+    # I use Gmail to send emails instead of SendGrid. SendGrid seems to have an issue and I can't get it to work.
     mail_server = 'smtp.gmail.com'
     port = 465
     sender = os.getenv('SENDER_EMAIL')
@@ -57,7 +53,6 @@ def send_email(to_emails, subject, body):
     count = 0
     try:
         session.login(sender, password)
-
         for email in to_emails:
             try:
                 msg = MIMEText(body)
@@ -66,7 +61,6 @@ def send_email(to_emails, subject, body):
                 msg['To'] = email
                 session.sendmail(sender, email, msg.as_string())
                 count += 1
-                logging.info(f'Sent to {email}')
             except Exception as ex1:
                 logging.error(f'{str(ex1)} {email}')
     except Exception as ex:
