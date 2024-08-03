@@ -7,7 +7,7 @@ class BaseConfig:
     POSTGRES_URL= 'mockudacity3.postgres.database.azure.com'  #TODO: Update value
     POSTGRES_USER= 'dinhnt11' #TODO: Update value
     POSTGRES_PW= 'passwordaA*'   #TODO: Update value
-    POSTGRES_DB= 'mockudacity3'   #TODO: Update value
+    POSTGRES_DB= 'techconfdb'   #TODO: Update value
     DB_URL = 'postgresql://{user}:{pw}@{url}/{db}'.format(user=POSTGRES_USER,pw=POSTGRES_PW,url=POSTGRES_URL,db=POSTGRES_DB)
     SQLALCHEMY_DATABASE_URI = os.getenv('SQLALCHEMY_DATABASE_URI') or DB_URL
     CONFERENCE_ID = 1

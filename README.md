@@ -67,8 +67,16 @@ Complete a month cost analysis of each Azure resource to give an estimate total 
 | Azure Service Bus                    | Basic: Max Message Size 256 KB - 1M OPS                                              | ~ 0.05$      |
 | Azure Storage Account                | StorageV2 (general purpose v2)                                                       | ~ 0.05$      |    
 | Azure Function App                   | Free F1: 1 GB memory                                                                 | 0$           |
-| Azure Web App                        | Free F1: 1 GB memory                                                                 | 0$           |
+| Azure Web App                        | Free F1: 1 GB memory                                                                 |              |
+| Total                                | Total cost                                                                           | ~ 27.1$      |
 | -------------------------------------| -------------------------------------------------------------------------------------|--------------|
 
 ## Architecture Explanation
 This is a placeholder section where you can provide an explanation and reasoning for your architecture selection for both the Azure Web App and Azure Function.
+
+The reason I chose to use both Azure Functions and Azure WebApp: 
+- Azure PostgreSQL Database: fully managed database service that includes backup, recovery, security, and monitoring,  easily scalable to meet growing data needs.
+- Azure Service Bus: ensures high service continuity and fault tolerance, supports queueing and messaging to manage workflows and communication between services. In this project this time i use it for sending mail, and i choose basic configuration to reduce cost.
+- Azure Storage Account: provides flexible storage options for unstructured data like blobs, files, queues, and tables. Most importantly, it is easy to manage and cost-effective.
+- Azure Web App and Azure Fuction App: in this issue, i believe that proper usage is the main issue, depending on the usage needs, I will choose the corresponding configuration. In the future, I will upgrade the configuration if there is a need to use it. But this is a pretty good implementation and can be considered.
+
